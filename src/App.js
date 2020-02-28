@@ -1,26 +1,74 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import AddItem from "./components/addItem";
+import ShowList from "./components/showList";
+import PropTypes from "prop-types";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+ShowList.propTypes = {
+  list: PropTypes.array
+};
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [
+        { text: "item1", isComplited: false },
+        { text: "item2", isComplited: false },
+        { text: "item3", isComplited: false }
+      ],
+      value: "",
+      classNameCss: ""
+    };
+  }
+
+  onChangeValue = event => {
+    this.setState({ value: event.target.value });
+  };
+
+  onAdditem = () => {
+    this.setState({
+      list: [
+        ...this.state.list,
+        { text: this.state.value, isComplited: false }
+      ],
+      value: ""
+    });
+  };
+  onCompleteItem = i => {
+    this.setState({
+      classNameCss: "item-clicked",
+      isComplited: !this.state.isComplited,
+      list: this.state.list.map((el, index) =>
+        i === index ? { ...el, isComplited: !el.isComplited } : el
+      )
+    });
+  };
+  onDeleteItem = i => {
+    this.setState(state => {
+      const list = state.list.filter((item, j) => i !== j);
+      return {
+        list
+      };
+    });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <AddItem
+          onAdditem={this.onAdditem}
+          onChangeValue={this.onChangeValue}
+          value={this.state.value}
+        />
+
+        <ShowList
+          list={this.state.list}
+          onDeleteItem={this.onDeleteItem}
+          onCompleteItem={this.onCompleteItem}
+          classNameCss={this.state.classNameCss}
+        />
+      </div>
+    );
+  }
 }
-
-export default App;
