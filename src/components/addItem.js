@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 
 export default class AddItem extends Component {
+  state = {
+    value: ""
+  };
+  onChangeValue = event => {
+    this.setState({ value: event.target.value });
+  };
   render() {
     return (
       <div className="add-item">
@@ -9,20 +15,22 @@ export default class AddItem extends Component {
         <input
           className="input"
           type="text"
-          ref="newitem"
-          value={this.props.value}
-          onChange={this.props.onChangeValue}
+          value={this.state.value}
+          onChange={this.onChangeValue}
           placeholder="Enter new task"
         ></input>
 
-        <div >
+        <div>
           <input
             className="button"
-            onClick={() => this.props.onAdditem()}
+            onClick={() => {
+              this.props.onAdditem(this.state.value);
+              this.setState({ value: "" });
+            }}
             type="button"
             value="Add"
           />
-        </div> 
+        </div>
       </div>
     );
   }

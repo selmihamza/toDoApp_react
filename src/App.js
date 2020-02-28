@@ -17,23 +17,15 @@ export default class App extends Component {
         { text: "item2", isComplited: false },
         { text: "item3", isComplited: false }
       ],
-      value: "",
       classNameCss: ""
     };
   }
 
-  onChangeValue = event => {
-    this.setState({ value: event.target.value });
-  };
-
-  onAdditem = () => {
+  onAdditem = item => {
     this.setState({
-      list: [
-        ...this.state.list,
-        { text: this.state.value, isComplited: false }
-      ],
-      value: ""
+      list: [...this.state.list, { text: item, isComplited: false }]
     });
+    console.log("item", item);
   };
   onCompleteItem = i => {
     this.setState({
@@ -59,7 +51,6 @@ export default class App extends Component {
         <AddItem
           onAdditem={this.onAdditem}
           onChangeValue={this.onChangeValue}
-          value={this.state.value}
         />
 
         <ShowList
